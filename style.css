@@ -1,0 +1,109 @@
+*{
+  padding:0;
+  margin:0;
+  border:0;
+  box-sizing:border-box;
+  font-family: 'Concert One', cursive;
+}
+
+div{
+  font-size:18px;
+}
+
+/*
+
+The :root CSS pseudo-class matches the root element of a tree representing the document. 
+In HTML, :root represents the <html> element and is identical to the selector html, 
+except that its specificity is higher.
+*/
+:root {
+  --background: #71DBD4;
+  
+  --secondary-color: #502D78;
+  background:#020504;
+}
+
+
+div#main{
+  box-sizing:border-box;
+  background:var(--secondary-color);
+  height:100vh;
+  width: 600px;
+  margin:0 auto;
+}
+
+
+h1{
+  font-family: 'Concert One', cursive;
+  color:white;
+  padding:20px;
+}
+
+#output{
+  padding:20px;
+  text-align:center;
+  background: var(--background);
+  
+}
+
+#messages{
+  padding:20px;
+  box-sizing:border-box;
+  color:white;
+}
+#messages::before{
+  content:"👉 "
+}
+
+
+#letters{
+  text-align:center;
+  height:calc(100% - 40px);
+  box-sizing:border-box;
+  overflow:auto;
+}
+
+.slot{
+  border-radius:100px;
+  color:white;
+  background:rgba(0,0,0, .5);
+  padding:16px 20px; 
+  margin:2px;
+  width:60px;
+  height:60px;
+  display:inline-block;
+  box-sizing:border-box;
+}
+
+.slot_space{
+  visibility:hidden;
+}
+
+.letter{
+  background:rgba(0,0,0, .5);
+  color:white;
+  padding:18px 26px; 
+  width:60px;
+  height:60px;
+  margin:6px;
+  display:inline-block;
+  cursor:pointer;
+}
+
+.filled{
+  border:2px solid black;
+  color:black;
+  background:none;
+}
+
+@media screen and (max-width: 600px) {
+  div#main {
+    width:100%;
+  }
+  .letter{
+    width:40px;
+    height:40px;
+    padding:10px;
+  }
+}
+
