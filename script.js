@@ -3,32 +3,28 @@ const movies = [
   "Star Wars",
   "Ready Player One"
 ];
+let selectedMovie = "";
+let errorCount = 0;
 
-
-let usedLetters = [];
 
 function selectMovie(){
   const index = getRandom(0, movies.length-1)
   return movies[index];
 }
 
-let movie = "";
-let errorCount = 0;
-
 
 function reset(){
   
   document.querySelectorAll(".slot").forEach(e => e.remove());
   document.querySelectorAll(".letter").forEach(e => e.remove());
-  usedLetters = []
   errorCount = 0;
   document.getElementById("messages").innerHTML = `${11-errorCount} attempts remaining`;
 }
 
 function setup(){
   reset();
-  movie = selectMovie();
-  createSlots(movie);
+  selectedMovie = selectMovie();
+  createSlots(selectedMovie);
   createLetters();
   
   
@@ -44,7 +40,7 @@ function createSlots(movie){
       const span = document.createElement("span");
       span.classList.add("slot")
       span.classList.add("unfilled")
-      span.classList.add(`slot_${ char == " " ? "space" : char.toUpperCase() }`)
+      span.classList.add(`slot_${ char.toUpperCase() }`)
       const text = document.createTextNode("?");
       span.appendChild(text)
       para.appendChild(span)
@@ -58,25 +54,28 @@ function createLetters(){
   var first = "A", last = "Z";
   for(var i = first.charCodeAt(0); i <= last.charCodeAt(0); i++) {
     var letter = String.fromCharCode(i);  
-    const span = document.createElement("span");
-    span.classList.add("letter")
-    span.classList.add(`letter_${letter}`)
-    const text = document.createTextNode(letter);
-    span.appendChild(text)
-    span.addEventListener( "click", (event)=>{
-          onLetterTapped(event.target.childNodes[0].nodeValue)
-    })
-    lettersContainer.appendChild(span);
+    const button = createInputButton(letter)
+    lettersContainer.appendChild(button);
   }
 
 }
 
-function onLetterTapped(letter){
-  if(usedLetters.includes(letter)) return;
-  usedLetters.push(letter)
-  document.querySelector(`.letter_${letter}`).style.opacity = 0.3
+function createInputButton(letter){
+  const button = document.createElement("button");
+  button.classList.add("letter")
+  button.classList.add(`letter_${letter}`)
+  const text = document.createTextNode(letter);
+  button.appendChild(text)
+  button.addEventListener("click", onLetterTapped)
+  return button
+}
+
+function onLetterTapped(event){
+  event.target.removeEventListener("click", onLetterTapped)
+  const letter = event.target.childNodes[0].nodeValue;
+  event.target.style.opacity = 0.3
   
-  if(!movie.toUpperCase().split("").includes(letter)){
+  if(!selectedMovie.toUpperCase().split("").includes(letter)){
     errorCount++;
     document.getElementById("messages").innerHTML = `${11-errorCount} attempts remaining`;
     if(errorCount == 11){
