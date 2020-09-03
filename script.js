@@ -1,28 +1,31 @@
-const movies = [
+const MAX_ERROR_COUNT = 6;
+
+const ALL_MOVIES = [
   "Indiana Jones",
   "Star Wars",
   "Ready Player One"
 ];
+
+
 let selectedMovie = "";
 let errorCount = 0;
 
 
 function selectMovie(){
-  const index = getRandom(0, movies.length-1)
-  return movies[index];
+  const index = getRandom(0, ALL_MOVIES.length-1)
+  return ALL_MOVIES[index];
 }
 
 
 function reset(){
-  
-  document.querySelectorAll(".slot").forEach(e => e.remove());
+  document.getElementById("hangman_graphic").setAttribute("src", `images/0.png`)
+  document.querySelectorAll("#output p").forEach(e => e.remove());
   document.querySelectorAll(".letter").forEach(e => e.remove());
   errorCount = 0;
-  document.getElementById("messages").innerHTML = `${11-errorCount} attempts remaining`;
+  document.getElementById("messages").innerHTML = `${MAX_ERROR_COUNT-errorCount} attempts remaining`;
 }
 
 function setup(){
-  reset();
   selectedMovie = selectMovie();
   createSlots(selectedMovie);
   createLetters();
@@ -38,7 +41,6 @@ function createSlots(movie){
     const chars = word.split("");
     chars.forEach( function(char){
       const span = document.createElement("span");
-      span.classList.add("slot")
       span.classList.add("unfilled")
       span.classList.add(`slot_${ char.toUpperCase() }`)
       const text = document.createTextNode("?");
@@ -76,12 +78,7 @@ function onLetterTapped(event){
   event.target.style.opacity = 0.3
   
   if(!selectedMovie.toUpperCase().split("").includes(letter)){
-    errorCount++;
-    document.getElementById("messages").innerHTML = `${11-errorCount} attempts remaining`;
-    if(errorCount == 11){
-      alert("Game Over");
-      setup();
-    }
+    guessedWrong();
     return;
   }
   
@@ -98,6 +95,17 @@ function onLetterTapped(event){
   }
   
   
+}
+
+function guessedWrong(){
+  errorCount++;
+  document.getElementById("hangman_graphic").setAttribute("src", `images/${errorCount}.png`)
+  document.getElementById("messages").innerHTML = `${MAX_ERROR_COUNT-errorCount} attempts remaining`;
+  if(errorCount == MAX_ERROR_COUNT){
+    alert("Game Over");
+    reset();
+    setup();
+  }
 }
 
 setup();
